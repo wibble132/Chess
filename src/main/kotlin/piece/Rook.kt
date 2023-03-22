@@ -10,6 +10,10 @@ class Rook(board: Board, playForward: Boolean, position: Pair<Int, Int>) : Piece
 
         // Move forward
         for (i in position.second + forwardDirection until currentBoardPositions[0].size step forwardDirection) {
+            if (!isValidMovePosition(Pair(position.first, i), currentBoardPositions)) {
+                break
+            }
+
             possibleMoves.add(Pair(position.first, i))
             if (currentBoardPositions[position.first][i] != -1) {
                 break
@@ -18,6 +22,10 @@ class Rook(board: Board, playForward: Boolean, position: Pair<Int, Int>) : Piece
 
         // Move backward
         for (i in position.second - forwardDirection downTo 0 step forwardDirection) {
+            if (!isValidMovePosition(Pair(position.first, i), currentBoardPositions)) {
+                break
+            }
+
             possibleMoves.add(Pair(position.first, i))
             if (currentBoardPositions[position.first][i] != -1) {
                 break
@@ -26,6 +34,10 @@ class Rook(board: Board, playForward: Boolean, position: Pair<Int, Int>) : Piece
 
         // Move right
         for (i in position.first + 1 until currentBoardPositions.size) {
+            if (!isValidMovePosition(Pair(i, position.second), currentBoardPositions)) {
+                break
+            }
+
             possibleMoves.add(Pair(i, position.second))
             if (currentBoardPositions[i][position.second] != -1) {
                 break
@@ -34,6 +46,10 @@ class Rook(board: Board, playForward: Boolean, position: Pair<Int, Int>) : Piece
 
         // Move left
         for (i in position.first - 1 downTo 0) {
+            if (!isValidMovePosition(Pair(i, position.second), currentBoardPositions)) {
+                break
+            }
+
             possibleMoves.add(Pair(i, position.second))
             if (currentBoardPositions[i][position.second] != -1) {
                 break

@@ -96,15 +96,16 @@ class Board(private val height: Int, width: Int, colour1: Colour, colour2: Colou
         }
 
         // Update En Passant
-        enPassant = if (piece is Pawn) {
-            if (abs(pos1.second - pos2.second) == 2) {
+
+        if (piece is Pawn) {
+            enPassant = if (abs(pos1.second - pos2.second) == 2) pos2 else null
+            if (pos1.first != pos2.first && enPassant != null && positions[pos2.first][pos2.second] == -1) {
                 // Remove pawn taken by En Passant
                 pieces[positions[pos2.first][pos2.second + if (piece.playForward) 1 else -1]].isAlive = false
                 positions[pos2.first][pos2.second + if (piece.playForward) 1 else -1] = -1
+            }
 
-                Pair(pos2.first, pos2.second + if (piece.playForward) -1 else 1)
-            } else null
-        } else null
+        }
 
         pieces.forEach { it.dirtyMoves = true }
 

@@ -6,19 +6,14 @@ class King(board: Board, playForward: Boolean, position: Pair<Int, Int>) : Piece
     override fun toChar(): Char = 'k'
 
     override fun findPossibleMoves(currentBoardPositions: List<List<Int>>): List<Pair<Int, Int>> {
-        val possibleMoves = mutableListOf<Pair<Int, Int>>()
+//        val possibleMoves = mutableListOf<Pair<Int, Int>>()
 
         val possibleMovesX = listOf(1, 1, 1, 0, 0, -1, -1, -1)
         val possibleMovesY = listOf(1, 0, -1, 1, -1, 1, 0, -1)
 
-        for (i in 0 until 8) {
-            val x = position.first + possibleMovesX[i]
-            val y = position.second + possibleMovesY[i]
-
-            if (x in currentBoardPositions.indices && y in 0 until currentBoardPositions[0].size) {
-                possibleMoves.add(Pair(x, y))
-            }
-        }
+        // Moves one square in any direction
+        val possibleMoves = possibleMovesX.map { it + position.first }.zip(possibleMovesY.map { it + position.second })
+            .filter { (x, y) -> isValidMovePosition(Pair(x, y), currentBoardPositions) }.toMutableList()
 
         // Castling
         if (!hasMoved && !board.isPositionAttacked(position)) {
@@ -31,7 +26,7 @@ class King(board: Board, playForward: Boolean, position: Pair<Int, Int>) : Piece
                     continue
                 }
                 val piece = board.pieces[currentBoardPositions[i][position.second]]
-                if (piece.toChar() == 'r' && !piece.hasMoved) {
+                if (piece.toChar() == 'r' && !piece.hasMoved && piece.playForward == playForward) {
                     possibleMoves.add(Pair(position.first, position.second + forwardDirection * 2))
                 }
             }
@@ -45,7 +40,7 @@ class King(board: Board, playForward: Boolean, position: Pair<Int, Int>) : Piece
                     continue
                 }
                 val piece = board.pieces[currentBoardPositions[i][position.second]]
-                if (piece.toChar() == 'r' && !piece.hasMoved) {
+                if (piece.toChar() == 'r' && !piece.hasMoved && piece.playForward == playForward) {
                     possibleMoves.add(Pair(position.first, position.second - forwardDirection * 2))
                 }
             }
@@ -59,7 +54,7 @@ class King(board: Board, playForward: Boolean, position: Pair<Int, Int>) : Piece
                     continue
                 }
                 val piece = board.pieces[currentBoardPositions[i][position.second]]
-                if (piece.toChar() == 'r' && !piece.hasMoved) {
+                if (piece.toChar() == 'r' && !piece.hasMoved && piece.playForward == playForward) {
                     possibleMoves.add(Pair(position.first - 2, position.second))
                 }
             }
@@ -73,7 +68,7 @@ class King(board: Board, playForward: Boolean, position: Pair<Int, Int>) : Piece
                     continue
                 }
                 val piece = board.pieces[currentBoardPositions[i][position.second]]
-                if (piece.toChar() == 'r' && !piece.hasMoved) {
+                if (piece.toChar() == 'r' && !piece.hasMoved && piece.playForward == playForward) {
                     possibleMoves.add(Pair(position.first + 2, position.second))
                 }
             }

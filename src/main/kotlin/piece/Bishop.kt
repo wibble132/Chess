@@ -10,47 +10,69 @@ class Bishop(board: Board, playForward: Boolean, position: Pair<Int, Int>) : Pie
 
         // Move forward right
         for (i in 1 until currentBoardPositions.size) {
-            if (position.first + i in currentBoardPositions.indices && position.second + i * forwardDirection in 0 until currentBoardPositions[0].size) {
-                possibleMoves.add(Pair(position.first + i, position.second + i * forwardDirection))
-                if (currentBoardPositions[position.first + i][position.second + i * forwardDirection] != -1) {
-                    break
-                }
-            } else {
+
+            if (!isValidMovePosition(
+                    Pair(position.first + i, position.second + i * forwardDirection),
+                    currentBoardPositions
+                )
+            ) {
+                break
+            }
+
+            possibleMoves.add(Pair(position.first + i, position.second + i * forwardDirection))
+            if (currentBoardPositions[position.first + i][position.second + i * forwardDirection] != -1) {
                 break
             }
         }
 
         // Move forward left
         for (i in 1 until currentBoardPositions.size) {
-            if (position.first - i in currentBoardPositions.indices && position.second + i * forwardDirection in 0 until currentBoardPositions[0].size) {
-                possibleMoves.add(Pair(position.first - i, position.second + i * forwardDirection))
-                if (currentBoardPositions[position.first - i][position.second + i * forwardDirection] != -1) {
-                    break
-                }
-            } else {
+
+            if (!isValidMovePosition(
+                    Pair(position.first - i, position.second + i * forwardDirection),
+                    currentBoardPositions
+                )
+            ) {
+                break
+            }
+
+            possibleMoves.add(Pair(position.first - i, position.second + i * forwardDirection))
+            if (currentBoardPositions[position.first - i][position.second + i * forwardDirection] != -1) {
                 break
             }
         }
 
         // Move backward right
         for (i in 1 until currentBoardPositions.size) {
-            if (position.first + i in currentBoardPositions.indices && position.second - i * forwardDirection in 0 until currentBoardPositions[0].size) {
-                possibleMoves.add(Pair(position.first + i, position.second - i * forwardDirection))
-                if (currentBoardPositions[position.first + i][position.second - i * forwardDirection] != -1) {
-                    break
-                }
-            } else {
+
+            if (!isValidMovePosition(
+                    Pair(position.first + i, position.second - i * forwardDirection),
+                    currentBoardPositions
+                )
+            ) {
+                break
+            }
+
+            possibleMoves.add(Pair(position.first + i, position.second - i * forwardDirection))
+            if (currentBoardPositions[position.first + i][position.second - i * forwardDirection] != -1) {
                 break
             }
         }
 
         // Move backward left
         for (i in 1 until currentBoardPositions.size) {
-            if (position.first - i in currentBoardPositions.indices && position.second - i * forwardDirection in 0 until currentBoardPositions[0].size) {
-                possibleMoves.add(Pair(position.first - i, position.second - i * forwardDirection))
-                if (currentBoardPositions[position.first - i][position.second - i * forwardDirection] == -1) {
-                    break
-                }
+
+            if (!isValidMovePosition(
+                    Pair(position.first - i, position.second - i * forwardDirection),
+                    currentBoardPositions
+                )
+            ) {
+                break
+            }
+
+            possibleMoves.add(Pair(position.first - i, position.second - i * forwardDirection))
+            if (currentBoardPositions[position.first - i][position.second - i * forwardDirection] != -1) {
+                break
             }
         }
 

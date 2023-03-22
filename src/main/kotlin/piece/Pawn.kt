@@ -26,14 +26,14 @@ class Pawn(board: Board, playForward: Boolean, position: Pair<Int, Int>) :
 
             // taking pieces diagonally infront of the pawn
             // Forward Right
-            if (position.first + 1 in currentBoardPositions.indices) {
+            if (isValidMovePosition(Pair(position.first + 1, position.second + forwardDirection), currentBoardPositions)) {
                 if (currentBoardPositions[position.first + 1][position.second + forwardDirection] != -1) {
                     possibleMoves.add(Pair(position.first + 1, position.second + forwardDirection))
                 }
             }
 
             // Forward Left
-            if (position.first - 1 in currentBoardPositions.indices) {
+            if (isValidMovePosition(Pair(position.first - 1, position.second + forwardDirection), currentBoardPositions)) {
                 if (currentBoardPositions[position.first - 1][position.second + forwardDirection] != -1) {
                     possibleMoves.add(Pair(position.first - 1, position.second + forwardDirection))
                 }

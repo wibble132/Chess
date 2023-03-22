@@ -10,6 +10,10 @@ class Queen(board: Board, playForward: Boolean, position: Pair<Int, Int>) : Piec
 
         // Move forward
         for (i in position.second + forwardDirection until currentBoardPositions[0].size step forwardDirection) {
+            if (!isValidMovePosition(Pair(position.first, i), currentBoardPositions)) {
+                break
+            }
+
             possibleMoves.add(Pair(position.first, i))
             if (currentBoardPositions[position.first][i] != -1) {
                 break
@@ -18,6 +22,10 @@ class Queen(board: Board, playForward: Boolean, position: Pair<Int, Int>) : Piec
 
         // Move backward
         for (i in position.second - forwardDirection downTo 0 step forwardDirection) {
+            if (!isValidMovePosition(Pair(position.first, i), currentBoardPositions)) {
+                break
+            }
+
             possibleMoves.add(Pair(position.first, i))
             if (currentBoardPositions[position.first][i] != -1) {
                 break
@@ -26,6 +34,10 @@ class Queen(board: Board, playForward: Boolean, position: Pair<Int, Int>) : Piec
 
         // Move right
         for (i in position.first + 1 until currentBoardPositions.size) {
+            if (!isValidMovePosition(Pair(i, position.second), currentBoardPositions)) {
+                break
+            }
+
             possibleMoves.add(Pair(i, position.second))
             if (currentBoardPositions[i][position.second] != -1) {
                 break
@@ -34,56 +46,64 @@ class Queen(board: Board, playForward: Boolean, position: Pair<Int, Int>) : Piec
 
         // Move left
         for (i in position.first - 1 downTo 0) {
+            if (!isValidMovePosition(Pair(i, position.second), currentBoardPositions)) {
+                break
+            }
+
             possibleMoves.add(Pair(i, position.second))
             if (currentBoardPositions[i][position.second] != -1) {
                 break
             }
         }
 
-        // Move forward right
+        // Move diagonally forward right
         for (i in 1 until currentBoardPositions.size) {
-            if (position.first + i in currentBoardPositions.indices && position.second + i * forwardDirection in 0 until currentBoardPositions[0].size) {
-                possibleMoves.add(Pair(position.first + i, position.second + i * forwardDirection))
-                if (currentBoardPositions[position.first + i][position.second + i * forwardDirection] != -1) {
-                    break
-                }
-            } else {
+            val newPosition = Pair(position.first + i, position.second + i * forwardDirection)
+            if (!isValidMovePosition(newPosition, currentBoardPositions)) {
+                break
+            }
+
+            possibleMoves.add(newPosition)
+            if (currentBoardPositions[newPosition.first][newPosition.second] != -1) {
                 break
             }
         }
 
-        // Move forward left
+        // Move diagonally forward left
         for (i in 1 until currentBoardPositions.size) {
-            if (position.first - i in currentBoardPositions.indices && position.second + i * forwardDirection in 0 until currentBoardPositions[0].size) {
-                possibleMoves.add(Pair(position.first - i, position.second + i * forwardDirection))
-                if (currentBoardPositions[position.first - i][position.second + i * forwardDirection] != -1) {
-                    break
-                }
-            } else {
+            val newPosition = Pair(position.first - i, position.second + i * forwardDirection)
+            if (!isValidMovePosition(newPosition, currentBoardPositions)) {
+                break
+            }
+
+            possibleMoves.add(newPosition)
+            if (currentBoardPositions[newPosition.first][newPosition.second] != -1) {
                 break
             }
         }
 
-        // Move backward right
+        // Move diagonally backward right
         for (i in 1 until currentBoardPositions.size) {
-            if (position.first + i in currentBoardPositions.indices && position.second - i * forwardDirection in 0 until currentBoardPositions[0].size) {
-                possibleMoves.add(Pair(position.first + i, position.second - i * forwardDirection))
-                if (currentBoardPositions[position.first + i][position.second - i * forwardDirection] != -1) {
-                    break
-                }
-            } else {
+            val newPosition = Pair(position.first + i, position.second - i * forwardDirection)
+            if (!isValidMovePosition(newPosition, currentBoardPositions)) {
+                break
+            }
+
+            possibleMoves.add(newPosition)
+            if (currentBoardPositions[newPosition.first][newPosition.second] != -1) {
                 break
             }
         }
 
-        // Move backward left
+        // Move diagonally backward left
         for (i in 1 until currentBoardPositions.size) {
-            if (position.first - i in currentBoardPositions.indices && position.second - i * forwardDirection in 0 until currentBoardPositions[0].size) {
-                possibleMoves.add(Pair(position.first - i, position.second - i * forwardDirection))
-                if (currentBoardPositions[position.first - i][position.second - i * forwardDirection] != -1) {
-                    break
-                }
-            } else {
+            val newPosition = Pair(position.first - i, position.second - i * forwardDirection)
+            if (!isValidMovePosition(newPosition, currentBoardPositions)) {
+                break
+            }
+
+            possibleMoves.add(newPosition)
+            if (currentBoardPositions[newPosition.first][newPosition.second] != -1) {
                 break
             }
         }

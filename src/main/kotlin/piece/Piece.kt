@@ -2,7 +2,12 @@ package piece
 
 import Board
 
-abstract class Piece(protected val board: Board, val playForward: Boolean, var position: Pair<Int, Int>, var hasMoved: Boolean = false) {
+abstract class Piece(
+    protected val board: Board,
+    val playForward: Boolean,
+    var position: Pair<Int, Int>,
+    var hasMoved: Boolean = false,
+) {
 
     var isAlive = false
 
@@ -33,7 +38,6 @@ abstract class Piece(protected val board: Board, val playForward: Boolean, var p
         }
 
 
-
     /**
      * Change the position of this piece.
      * NOTE: This doesn't update the board, only this piece. This should only be called by the board.
@@ -41,5 +45,19 @@ abstract class Piece(protected val board: Board, val playForward: Boolean, var p
     fun move(newPosition: Pair<Int, Int>) {
         position = newPosition
         hasMoved = true
+    }
+
+    protected fun isValidMovePosition(position: Pair<Int, Int>, currentBoardPositions: List<List<Int>>): Boolean {
+        // Check if position is on the board
+        if (position.first !in currentBoardPositions.indices || position.second !in currentBoardPositions[0].indices) {
+            return false
+        }
+
+        // Check if position is occupied by a piece of the same color
+        if (currentBoardPositions[position.first][position.second] != -1 && board.pieces[currentBoardPositions[position.first][position.second]].playForward == playForward) {
+            return false
+        }
+
+        return true
     }
 }
