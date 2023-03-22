@@ -5,6 +5,8 @@ class Board(private val height: Int, width: Int, colour1: Colour, colour2: Colou
 
     val pieces: MutableList<Piece> = mutableListOf()
 
+    var winner: Boolean? = null
+
     var enPassant = null as Pair<Int, Int>?
 
     // index of piece in pieces
@@ -16,8 +18,8 @@ class Board(private val height: Int, width: Int, colour1: Colour, colour2: Colou
     private fun isNotEmpty(pos: Pair<Int, Int>): Boolean = !isEmpty(pos)
 
     private val textColEscape = "\u001b"
-    private val colString1 = "$textColEscape[38;2;${colour1.red};${colour1.green};${colour1.blue}m"
-    private val colString2 = "$textColEscape[38;2;${colour2.red};${colour2.green};${colour2.blue}m"
+    val colString1 = "$textColEscape[38;2;${colour1.red};${colour1.green};${colour1.blue}m"
+    val colString2 = "$textColEscape[38;2;${colour2.red};${colour2.green};${colour2.blue}m"
     private val colBackground1 = "$textColEscape[48;2;210;180;118m"
     private val colBackground2 = "$textColEscape[48;2;153;116;72m"
     private val clearColString = "$textColEscape[0m"
@@ -78,6 +80,10 @@ class Board(private val height: Int, width: Int, colour1: Colour, colour2: Colou
 
         if (positions[pos2.first][pos2.second] != -1) {
             pieces[positions[pos2.first][pos2.second]].isAlive = false
+            if (pieces[positions[pos2.first][pos2.second]] is King) {
+                // Game over
+                winner = piece.playForward
+            }
         }
 
         positions[pos1.first][pos1.second] = -1
@@ -96,7 +102,6 @@ class Board(private val height: Int, width: Int, colour1: Colour, colour2: Colou
         }
 
         // Update En Passant
-
         if (piece is Pawn) {
             enPassant = if (abs(pos1.second - pos2.second) == 2) pos2 else null
             if (pos1.first != pos2.first && enPassant != null && positions[pos2.first][pos2.second] == -1) {
@@ -104,7 +109,8 @@ class Board(private val height: Int, width: Int, colour1: Colour, colour2: Colou
                 pieces[positions[pos2.first][pos2.second + if (piece.playForward) 1 else -1]].isAlive = false
                 positions[pos2.first][pos2.second + if (piece.playForward) 1 else -1] = -1
             }
-
+        } else {
+            enPassant = null
         }
 
         pieces.forEach { it.dirtyMoves = true }
@@ -114,10 +120,9 @@ class Board(private val height: Int, width: Int, colour1: Colour, colour2: Colou
 
     fun isPositionAttacked(pos: Pair<Int, Int>) = pieces.any { it.possibleMoves.contains(pos) }
 
-
     companion object {
         fun defaultChessBoard(): Board {
-            val b = Board(8, 8, Colour(0xffffff), Colour(0))
+            val b = Board(8, 8, Colour(255u, 255u, 255u), Colour(0))
             b.addPieces(
                 listOf(
                     Pawn(b, true, Pair(0, 1)),

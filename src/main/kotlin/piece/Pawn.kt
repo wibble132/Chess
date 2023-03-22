@@ -41,7 +41,7 @@ class Pawn(board: Board, playForward: Boolean, position: Pair<Int, Int>) :
 
             // En Passant
             if (board.enPassant != null) {
-                if (board.enPassant!!.second == position.second + forwardDirection) {
+                if (board.enPassant!!.second == position.second) {
                     if (board.enPassant!!.first == position.first + 1) {
                         possibleMoves.add(Pair(position.first + 1, position.second + forwardDirection))
                     } else if (board.enPassant!!.first == position.first - 1) {
